@@ -19,6 +19,7 @@
   "dependencies": {
     "babelify": "^6.0.2",
     "browserify": "^9.0.8",
+    "electron-prebuilt": "^0.24.0",
     "gulp": "^3.8.11",
     "gulp-plumber": "^1.0.0",
     "gulp-util": "^3.0.4",
