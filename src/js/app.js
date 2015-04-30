@@ -1,4 +1,8 @@
 import OffersPanel from './components/OffersPanel.jsx'
+import LoginPanel from './components/LoginPanel.jsx'
 
 var React = require('react');
-React.render(<OffersPanel/>, document.body)
+React.render(<div>
+  <LoginPanel/>
+  <OffersPanel/>
+</div>, document.body)

@@ -2,7 +2,6 @@ import Reflux from 'reflux'
 import Immutable from 'immutable'
 
 import BoxActions from '../actions/BoxActions.js'
-import Boxes from '../apis/Boxes.js'
 
 const BoxStore = Reflux.createStore({
   listenables: BoxActions,
