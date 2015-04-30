@@ -7,13 +7,8 @@ import Boxes from '../apis/Boxes.js'
 const BoxStore = Reflux.createStore({
   listenables: BoxActions,
   state: Immutable.fromJS({
-    boxes: {},
+    boxes: {available: [], on_demand: [], owned: []},
   }),
-
-  //
-  onList() {
-      Boxes.list().then(BoxActions.listComplete, BoxActions.listError)
-  },
 
   //
   onListComplete(boxes) {
@@ -22,9 +17,8 @@ const BoxStore = Reflux.createStore({
   },
 
   //
-  onListError(err) {
-    throw err
-  }
+  onListError(err) { throw err }
+
 });
 
 export default BoxStore
