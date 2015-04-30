@@ -1,4 +1,4 @@
-import OpenDirBtn from './components/OpenDirBtn.jsx'
+import OffersPanel from './components/OffersPanel.jsx'
 
 var React = require('react');
-React.render(<OpenDirBtn/>, document.body)
+React.render(<OffersPanel/>, document.body)
