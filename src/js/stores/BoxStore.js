@@ -12,7 +12,7 @@ const BoxStore = Reflux.createStore({
 
   //
   onListComplete(boxes) {
-    this.state = this.state.set('boxes', Immutable.Map(boxes))
+    this.state = this.state.set('boxes', Immutable.fromJS(boxes))
     this.trigger(this.state)
   },
 

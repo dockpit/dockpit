@@ -13,14 +13,14 @@ class OffersPanel extends React.Component {
     super(props)
     this.state = {
       offerData: Immutable.Map(),
-      boxData: BoxStore.state
+      boxes: BoxStore.state.get('boxes')
     }
   }
 
   //
   componentDidMount() {
     this.offerStoreUnsubscribe = OfferStore.listen( data => this.setState({offerData: data}) )
-    this.boxStoreUnsubscribe = BoxStore.listen( data => this.setState({boxData: data}) )
+    this.boxStoreUnsubscribe = BoxStore.listen( data => this.setState({boxes: data.get('boxes')}) )
 
     OfferActions.load()
     BoxActions.list()
@@ -33,10 +33,37 @@ class OffersPanel extends React.Component {
   }
 
   //
+  claimBox(boxid, ev) {
+    ev.preventDefault()
+    BoxActions.launch(boxid)
+  }
+
+  //
   render() {
-    return <div>Hello {this.state.boxData}</div>
+    var me = this
+    return <div>
+      <h2>Available:</h2>
+      <ul>
+        {this.state.boxes.get('available').map(function(b){
+          return <li key={b.get('id')}>{b.get('id')} <button onClick={me.claimBox.bind(me, b.get('id'))}>Claim!</button></li>
+        })}
+      </ul>
+
+      <h2>On-Demand:</h2>
+      <ul>
+        {this.state.boxes.get('on_demand').map(function(b){
+          return <li key={b.get('id')}>{b.get('id')} <button onClick={me.claimBox.bind(me, b.get('id'))}>Claim!</button></li>
+        })}
+      </ul>
+
+      <h2>Owned:</h2>
+      <ul>
+        {this.state.boxes.get('owned').map(function(b){
+          return <li key={b.get('id')}>{b.get('id')}</li>
+        })}
+      </ul>
+    </div>
   }
 }
-
 
 export default OffersPanel;

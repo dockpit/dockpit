@@ -13,11 +13,11 @@ const Boxes = {
     })
   },
 
-  //boxes.info
-  info() {
+  //boxes.launch
+  launch(id) {
     return new Promise((resolve, reject) => {
       request
-        .post(shared.endpoint + "/api/boxes.info")
+        .post(shared.endpoint + "/api/boxes.launch?box="+id)
         .set('Accept', 'application/json')
         .end(shared.responseHandler(resolve, reject, "box"));
     })
