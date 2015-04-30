@@ -1,11 +1,12 @@
 var gulp = require("gulp")
-var gutil = require('gulp-util');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var browserify = require('browserify');
-var watchify = require('watchify');
+var gutil = require('gulp-util')
+var source = require('vinyl-source-stream')
+var buffer = require('vinyl-buffer')
+var browserify = require('browserify')
+var watchify = require('watchify')
 var babelify = require('babelify')
 var plumber = require("gulp-plumber")
+var livereload = require('gulp-livereload')
 
 //compiles all javascript
 var compile = function(watch) {
@@ -20,6 +21,7 @@ var compile = function(watch) {
       .pipe(source('bundle.js'))
       .pipe(buffer())
       .pipe(gulp.dest('./dist'))
+      .pipe(livereload())
   }
 
   if (watch) {
@@ -34,8 +36,12 @@ var compile = function(watch) {
   return rebundle()
 }
 
-gulp.task('default', function() {
+gulp.task('watch', function() {
+  livereload.listen();
+  gutil.log("Livereload (tiny-lr) listening on http://localhost:35729")
   return compile(true)
 })
+
+gulp.task('default', ['watch'])
 
 
