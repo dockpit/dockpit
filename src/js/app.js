@@ -1,8 +1,17 @@
-import OffersPanel from './components/OffersPanel.jsx'
-import LoginPanel from './components/LoginPanel.jsx'
+import React from 'react'
+import Router from 'react-router'
+import { Route, DefaultRoute } from 'react-router'
 
-var React = require('react');
-React.render(<div>
-  <LoginPanel/>
-  <OffersPanel/>
-</div>, document.body)
+import App from './views/App.jsx'
+import Daily from './views/Daily.jsx'
+
+var routes = (
+  <Route handler={App}>
+    <DefaultRoute handler={Daily}/>
+  </Route>
+);
+
+Router.run(routes, Router.HashLocation, (Root) => {
+  React.render(<Root/>, document.body);
+});
+

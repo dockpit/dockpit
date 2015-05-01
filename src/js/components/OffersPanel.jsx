@@ -1,10 +1,10 @@
 import React from 'react';
 import Immutable from 'immutable'
 
-import OfferActions from '../actions/OfferActions.js'
-import OfferStore from '../stores/OfferStore.js'
+import UserStore from '../stores/UserStore.js'
 import BoxActions from '../actions/BoxActions.js'
 import BoxStore from '../stores/BoxStore.js'
+import BoxItem from './BoxItem.jsx'
 
 class OffersPanel extends React.Component {
 
@@ -12,17 +12,23 @@ class OffersPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      offerData: Immutable.Map(),
-      boxes: BoxStore.state.get('boxes')
+      boxes: BoxStore.state.get('boxes'),
+      user: UserStore.state.get('user'),
+      launching: "",
     }
+
+    this.claim = this.claim.bind(this)
   }
 
   //
   componentDidMount() {
-    this.offerStoreUnsubscribe = OfferStore.listen( data => this.setState({offerData: data}) )
-    this.boxStoreUnsubscribe = BoxStore.listen( data => this.setState({boxes: data.get('boxes')}) )
+    this.boxStoreUnsubscribe = BoxStore.listen( data => this.setState({
+      boxes: data.get('boxes'),
+      launching: data.get('launching'),
+    }))
 
-    OfferActions.load()
+    this.userStoreUnsubscribe = UserStore.listen( data => this.setState({ user: data.get('user') }))
+
     BoxActions.list()
   }
 
@@ -33,35 +39,43 @@ class OffersPanel extends React.Component {
   }
 
   //
-  claimBox(boxid, ev) {
+  claim(boxid, ev) {
     ev.preventDefault()
-    BoxActions.launch(boxid)
+    BoxActions.launch(boxid, this.state.user.get('token'))
   }
 
   //
   render() {
     var me = this
+
+    var OwnedBoxes
+    if(this.state.user.get('token')) {
+      OwnedBoxes = <div>
+        <h2>Owned:</h2>
+        <ul>
+          {this.state.boxes.get('owned').map(function(b){
+            return <li key={b.get('id')}>{b.get('id')}</li>
+          })}
+        </ul>
+      </div>
+    }
+
     return <div>
       <h2>Available:</h2>
       <ul>
         {this.state.boxes.get('available').map(function(b){
-          return <li key={b.get('id')}>{b.get('id')} <button onClick={me.claimBox.bind(me, b.get('id'))}>Claim!</button></li>
+          return <BoxItem launching={me.state.launching} key={b.get('id')} box={b} user={me.state.user}/>
         })}
       </ul>
 
       <h2>On-Demand:</h2>
       <ul>
         {this.state.boxes.get('on_demand').map(function(b){
-          return <li key={b.get('id')}>{b.get('id')} <button onClick={me.claimBox.bind(me, b.get('id'))}>Claim!</button></li>
+          return <BoxItem launching={me.state.launching} key={b.get('id')} box={b} user={me.state.user}/>
         })}
       </ul>
 
-      <h2>Owned:</h2>
-      <ul>
-        {this.state.boxes.get('owned').map(function(b){
-          return <li key={b.get('id')}>{b.get('id')}</li>
-        })}
-      </ul>
+      {OwnedBoxes}
     </div>
   }
 }

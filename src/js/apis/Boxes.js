@@ -4,20 +4,20 @@ import shared from './shared.js'
 const Boxes = {
 
   //boxes.list
-  list() {
+  list(token) {
     return new Promise((resolve, reject) => {
       request
-        .post(shared.endpoint + "/api/boxes.list")
+        .post(shared.endpoint + "/api/boxes.list?token="+(token ? token : ""))
         .set('Accept', 'application/json')
         .end(shared.responseHandler(resolve, reject, "boxes"))
     })
   },
 
   //boxes.launch
-  launch(id) {
+  launch(id, token) {
     return new Promise((resolve, reject) => {
       request
-        .post(shared.endpoint + "/api/boxes.launch?box="+id)
+        .post(shared.endpoint + "/api/boxes.launch?box="+id+"&token="+token)
         .set('Accept', 'application/json')
         .end(shared.responseHandler(resolve, reject, "box"));
     })

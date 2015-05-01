@@ -14,7 +14,7 @@ class LoginPanel extends React.Component {
         email: "",
         password: "",
       }),
-      user: Immutable.fromJS({}),
+      loading: false,
       error: ""
     }
 
@@ -26,7 +26,7 @@ class LoginPanel extends React.Component {
   //
   componentDidMount() {
     this.unsubscribe = UserStore.listen( data => this.setState({
-      user: data.get('user'),
+      loading: data.get('isAuthenticating'),
       error: data.get('authenticationError'),
     }))
   }
@@ -49,12 +49,11 @@ class LoginPanel extends React.Component {
   //
   render() {
     return <div>
-        {this.state.user.get('token')}
         <form onSubmit={this.login}>
           {this.state.error ? <div>{this.state.error}</div> : null}
           <input type="text" placeholder="email" value={this.state.creds.get('email')} onChange={this.onEmailChange} />
           <input type="password" placeholder="password" value={this.state.creds.get('password')} onChange={this.onPasswordChange} />
-          <button>Login</button>
+          <button>Login{this.state.loading ? <span>...</span> : null}</button>
         </form>
     </div>
   }
