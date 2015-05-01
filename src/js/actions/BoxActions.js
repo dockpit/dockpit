@@ -4,7 +4,8 @@ import Boxes from '../apis/Boxes.js'
 
 const BoxActions = Reflux.createActions({
   'list': {children: ["complete", "error"]},
-  'launch': {children: ["complete", "error"]}
+  'launch': {children: ["complete", "error"]},
+  'status': {children: ["complete", "error"]},
 })
 
 BoxActions.list.listen(function(token) {
@@ -13,6 +14,10 @@ BoxActions.list.listen(function(token) {
 
 BoxActions.launch.listen(function(id, token) {
   Boxes.launch(id, token).then(this.complete, this.error)
+})
+
+BoxActions.status.listen(function(id, token) {
+  Boxes.status(id, token).then(this.complete, this.error)
 })
 
 export default BoxActions

@@ -16,12 +16,9 @@ const BoxStore = Reflux.createStore({
     this.listenTo(UserStore, this.onUserStoreChanged);
   },
 
-  // relist boxes when the user logs in
+  // relist boxes when the user store changes
   onUserStoreChanged(data) {
-    var user = data.get('user')
-    if(user.get('token')) {
-      BoxActions.list(user.get('token'))
-    }
+    BoxActions.list(UserStore.state.get('user').get('token'))
   },
 
   //
@@ -34,6 +31,23 @@ const BoxStore = Reflux.createStore({
   onListError(err) { throw err },
 
   //
+  onStatusComplete(box) {
+    var ip = box.ip
+    if(!ip) {
+      //no ip yet? poll every 1000 second until we do
+      return setTimeout(function(){
+        BoxActions.status(box.id, UserStore.state.get('user').get('token'))
+      }, 1000)
+    }
+
+    //@todo wait for docker to be available
+
+    //@todo, alternatively the boxes state can be updated manually
+    //to save on requests quota
+    BoxActions.list(UserStore.state.get('user').get('token'))
+  },
+
+  //
   onLaunch(id) {
     this.state = this.state.set('launching', id)
     this.trigger(this.state)
@@ -43,6 +57,9 @@ const BoxStore = Reflux.createStore({
   onLaunchComplete(box) {
     this.state = this.state.set('launching', "")
     this.trigger(this.state)
+
+    BoxActions.status(box.id, UserStore.state.get('user').get('token'))
+    BoxActions.list(UserStore.state.get('user').get('token'))
   },
 
   //

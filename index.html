@@ -3,63 +3,14 @@
   <head>
     <title>Hello World!</title>
 
-    <script>
-      var fs = require('fs')
-      var remote = require('remote');
-      var path = require('path')
-      var osenv = remote.require('osenv');
-
-      var confDir = path.join(osenv.home(), '.dockpit')
-      var confFile = path.join(confDir, 'dockpit.json')
-
-      var defaultConfig = {
-        token: "",
-      }
-
-      //write given configuration to the dockpit file, assumes
-      //directory is already there
-      window.dpWriteHomeConfig = function(conf, cb) {
-        fs.writeFile(confFile, JSON.stringify(conf), function (err) {
-          cb(err, conf)
-        });
-      }
-
-      //read dockpit configuration, lazily initiates and writes default
-      //configuration if path or file doesnt exist
-      window.dpReadHomeConfig = function(cb) {        
-        fs.mkdir(confDir, 0777, function(err){
-          if(err && err.code != 'EEXIST') return cb(err, dir)
-
-          fs.readFile(confFile, function (err, data) {
-            if(err && err.code != 'ENOENT') return cb(err, null)
-
-            if(err && err.code == 'ENOENT') {
-              return window.dpWriteHomeConfig(defaultConfig, cb)
-            }
-
-            var conf = defaultConfig
-            try {
-              conf = JSON.parse(data)
-            } catch(syntError) {
-              console.log("Failed to read config: " + syntError)
-              return
-            }
-
-            cb(null, conf)
-          });
-        })
-      }
-
-      window.dpReadHomeConfig(function(err, conf){
-        if(err) return console.log("Failed to read configuration: " + err)
-        console.log("Use configuration: "+JSON.stringify(conf))
-      })
-    </script>
-    
+    <script type="text/javascript" src="src/js/app_conf_helper.js"></script>
+    <script type="text/javascript" src="src/js/app_term_helper.js"></script>
   </head>
   <body>
 
   	<script type="text/javascript" src="dist/bundle.js"></script>
+    
+  	<!-- @todo remove dist version -->
     <script src="http://localhost:35729/livereload.js"></script>
   </body>
 </html>

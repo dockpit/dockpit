@@ -10,9 +10,10 @@ var livereload = require('gulp-livereload')
 
 //compiles all javascript
 var compile = function(watch) {
-  var bundler = browserify('./src/js/app.js', { debug: true }).transform(babelify)  
+  var bundler = browserify('./src/js/app.js', { debug: true }).transform(babelify)
 
   var rebundle = function() {
+    //@todo, copy helper files in ./src
     return bundler.bundle()
       .on('error', function (err) {
             gutil.log(gutil.colors.red("Bundling Error:"), err.toString());

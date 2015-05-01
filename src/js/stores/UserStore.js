@@ -7,7 +7,7 @@ import Users from '../apis/Users.js'
 const UserStore = Reflux.createStore({
   listenables: UserActions,
   state: Immutable.fromJS({
-    user: {},
+    user: window.DockpitConf.user,
     isAuthenticating: false,
     authenticationError: "",
   }),
@@ -24,7 +24,11 @@ const UserStore = Reflux.createStore({
     this.state = this.state.set('authenticationError', "")
     this.state = this.state.set('isAuthenticating', false)
 
-    this.trigger(this.state)
+    //@outofreact - write to disk
+    var me = this
+    var newConf = window.DockpitConf
+    newConf.user = this.state.get('user').toJS()
+    window.dpWriteHomeConfig(newConf, () => me.trigger(me.state))
   },
 
   //

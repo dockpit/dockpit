@@ -5,6 +5,7 @@ import UserStore from '../stores/UserStore.js'
 import BoxActions from '../actions/BoxActions.js'
 import BoxStore from '../stores/BoxStore.js'
 import BoxItem from './BoxItem.jsx'
+import OwnedBoxItem from './OwnedBoxItem.jsx'
 
 class OffersPanel extends React.Component {
 
@@ -28,8 +29,7 @@ class OffersPanel extends React.Component {
     }))
 
     this.userStoreUnsubscribe = UserStore.listen( data => this.setState({ user: data.get('user') }))
-
-    BoxActions.list()
+    BoxActions.list(this.state.user.get('token'))
   }
 
   //
@@ -54,7 +54,7 @@ class OffersPanel extends React.Component {
         <h2>Owned:</h2>
         <ul>
           {this.state.boxes.get('owned').map(function(b){
-            return <li key={b.get('id')}>{b.get('id')}</li>
+            return <OwnedBoxItem key={b.get('id')} box={b} user={me.state.user}/>
           })}
         </ul>
       </div>

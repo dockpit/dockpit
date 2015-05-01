@@ -21,6 +21,16 @@ const Boxes = {
         .set('Accept', 'application/json')
         .end(shared.responseHandler(resolve, reject, "box"));
     })
+  },
+
+  //boxes.status
+  status(id, token) {
+    return new Promise((resolve, reject) => {
+      request
+        .post(shared.endpoint + "/api/boxes.status?box="+id+"&token="+token)
+        .set('Accept', 'application/json')
+        .end(shared.responseHandler(resolve, reject, "box"));
+    })
   }
 
 }

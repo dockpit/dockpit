@@ -9,7 +9,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      user: Immutable.fromJS({}),
+      user: UserStore.state.get('user'),
     }
   }
 
