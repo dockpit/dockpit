@@ -23,6 +23,16 @@ const Boxes = {
     })
   },
 
+  //boxes.remove
+  remove(id, token) {
+    return new Promise((resolve, reject) => {
+      request
+        .post(shared.endpoint + "/api/boxes.remove?box="+id+"&token="+token)
+        .set('Accept', 'application/json')
+        .end(shared.responseHandler(resolve, reject, ""));
+    })
+  },
+
   //boxes.status
   status(id, token) {
     return new Promise((resolve, reject) => {

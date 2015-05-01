@@ -6,6 +6,7 @@ const BoxActions = Reflux.createActions({
   'list': {children: ["complete", "error"]},
   'launch': {children: ["complete", "error"]},
   'status': {children: ["complete", "error"]},
+  'remove': {children: ["complete", "error"]},
 })
 
 BoxActions.list.listen(function(token) {
@@ -18,6 +19,10 @@ BoxActions.launch.listen(function(id, token) {
 
 BoxActions.status.listen(function(id, token) {
   Boxes.status(id, token).then(this.complete, this.error)
+})
+
+BoxActions.remove.listen(function(id, token) {
+  Boxes.remove(id, token).then(this.complete, this.error)
 })
 
 export default BoxActions

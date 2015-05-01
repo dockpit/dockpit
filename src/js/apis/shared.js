@@ -16,6 +16,10 @@ export default {
         return reject(resp.text)
       }
 
+      //responses without data dont have a key
+      if(key === "") {
+        return resolve(null)
+      }
 
       if(!data[key]) {
         return reject("Response data has data key '"+key+'": '+data)

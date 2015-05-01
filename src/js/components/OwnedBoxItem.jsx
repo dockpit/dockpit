@@ -10,6 +10,7 @@ class OwnedBoxItem extends React.Component {
     super(props)
 
     this.open = this.open.bind(this)
+    this.remove = this.remove.bind(this)
   }
 
   //
@@ -23,7 +24,7 @@ class OwnedBoxItem extends React.Component {
     ev.preventDefault()
 
     //@outofreact
-    //write tls to tmp directory&launch terminal
+    //write tls to tmp directory&launch in terminal
     window.dpWriteBoxTLS(
       this.props.box.get('id'),
       this.props.box.get('ca'),
@@ -41,10 +42,20 @@ class OwnedBoxItem extends React.Component {
   }
 
   //
+  remove(ev) {
+    ev.preventDefault()
+
+    if(confirm("Are you sure you want to remove box '"+this.props.box.get('id')+"'?")) {
+      BoxActions.remove(this.props.box.get('id'), this.props.user.get('token'))
+    }
+  }
+
+  //
   render() {
     return <li>
       {this.props.box.get('id')}
       {this.props.box.get('ip') ? <button onClick={this.open}>Open</button> : "waiting for ip..."}
+      <button onClick={this.remove}>Remove</button>
     </li>
   }
 }
