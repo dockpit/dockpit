@@ -1,6 +1,8 @@
 import React from 'react';
 import Immutable from 'immutable'
 
+import OfferStore from '../stores/OfferStore.js'
+import OfferActions from '../actions/OfferActions.js'
 import UserStore from '../stores/UserStore.js'
 import BoxActions from '../actions/BoxActions.js'
 import BoxStore from '../stores/BoxStore.js'
@@ -13,6 +15,7 @@ class OffersPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      offers: OfferStore.state.get('offers'),
       boxes: BoxStore.state.get('boxes'),
       user: UserStore.state.get('user'),
       launching: "",
@@ -29,7 +32,10 @@ class OffersPanel extends React.Component {
     }))
 
     this.userStoreUnsubscribe = UserStore.listen( data => this.setState({ user: data.get('user') }))
+    this.offerStoreUnsubscribe = OfferStore.listen( data => this.setState({ offers: data.get('offers') }))
+
     BoxActions.list(this.state.user.get('token'))
+    OfferActions.list(this.state.user.get('token'))
   }
 
   //
@@ -61,18 +67,41 @@ class OffersPanel extends React.Component {
       </div>
     }
 
+    var mapped = this.state.offers.map((o) => {
+      var available = []
+      this.state.boxes.get('available').forEach((b) => {
+        if(b.get("box_template") == o.get("box_template")) {
+          available.push(b)
+        }
+      })
+
+      if(available.length < 1) {
+        this.state.boxes.get('on_demand').forEach((b) => {
+          available.push(b)
+        })
+      }
+
+      return o.set("boxes", Immutable.fromJS(available))
+    })
+
     return <div>
+      offers: <span>{this.state.offers.size}</span>
       <h2>Available:</h2>
       <ul>
-        {this.state.boxes.get('available').map(function(b){
-          return <BoxItem launching={me.state.launching} key={b.get('id')} box={b} user={me.state.user}/>
-        })}
-      </ul>
-
-      <h2>On-Demand:</h2>
-      <ul>
-        {this.state.boxes.get('on_demand').map(function(b){
-          return <BoxItem launching={me.state.launching} key={b.get('id')} box={b} user={me.state.user}/>
+        {mapped.map(function(o, idx){
+          return <li key={idx}>
+            <span>{o.get("token")}</span>
+            <ul>
+            {o.get('boxes').map(function(b){
+              return <BoxItem
+                        launching={me.state.launching}
+                        key={b.get('id')}
+                        offer={o}
+                        box={b}
+                        user={me.state.user}/>
+            })}
+            </ul>
+          </li>
         })}
       </ul>
 

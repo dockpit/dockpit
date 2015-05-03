@@ -17,7 +17,7 @@ class BoxItem extends React.Component {
     ev.preventDefault()
 
     if(this.props.user.get('token')) {
-      BoxActions.launch(this.props.box.get('id'), this.props.user.get('token'))
+      BoxActions.launch(this.props.box.get('id'), this.props.user.get('token'), this.props.offer.get('token'))
     }else {
       //@todo add login modal
       console.log("not logged in")
@@ -37,6 +37,7 @@ class BoxItem extends React.Component {
 
 BoxItem.propTypes = {
   box: React.PropTypes.object.isRequired,
+  offer: React.PropTypes.object.isRequired,
   user: React.PropTypes.object.isRequired,
   launching: React.PropTypes.string.isRequired,
 }

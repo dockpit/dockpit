@@ -13,8 +13,8 @@ BoxActions.list.listen(function(token) {
   Boxes.list(token).then(this.complete, this.error)
 })
 
-BoxActions.launch.listen(function(id, token) {
-  Boxes.launch(id, token).then(this.complete, this.error)
+BoxActions.launch.listen(function(id, token, offerToken) {
+  Boxes.launch(id, token, offerToken).then(this.complete, this.error)
 })
 
 BoxActions.status.listen(function(id, token) {

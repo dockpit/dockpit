@@ -14,10 +14,10 @@ const Boxes = {
   },
 
   //boxes.launch
-  launch(id, token) {
+  launch(id, token, offerToken) {
     return new Promise((resolve, reject) => {
       request
-        .post(shared.endpoint + "/api/boxes.launch?box="+id+"&token="+token)
+        .post(shared.endpoint + "/api/boxes.launch?box="+id+"&token="+token+"&offer_token="+offerToken)
         .set('Accept', 'application/json')
         .end(shared.responseHandler(resolve, reject, "box"));
     })

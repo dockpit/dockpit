@@ -14,10 +14,10 @@ const Users = {
   },
 
   //users.payment
-  payment(token, stripe_token) {
+  payment(token, stripeToken) {
     return new Promise((resolve, reject) => {
       request
-        .post(shared.endpoint + "/api/users.payment?token="+token+"&stripe_token="+stripe_token)
+        .post(shared.endpoint + "/api/users.payment?token="+token+"&stripe_token="+stripeToken)
         .set('Accept', 'application/json')
         .end(shared.responseHandler(resolve, reject, "user"));
     })
