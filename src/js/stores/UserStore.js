@@ -12,6 +12,12 @@ const UserStore = Reflux.createStore({
     authenticationError: "",
   }),
 
+  _persistLocally(cb) {
+    var newConf = window.DockpitConf
+    newConf.user = this.state.get('user').toJS()
+    window.dpWriteHomeConfig(newConf, cb)
+  },
+
   //
   onAuthenticate() {
     this.state = this.state.set('isAuthenticating', true)
@@ -24,11 +30,13 @@ const UserStore = Reflux.createStore({
     this.state = this.state.set('authenticationError', "")
     this.state = this.state.set('isAuthenticating', false)
 
-    //@outofreact - write to disk
-    var me = this
-    var newConf = window.DockpitConf
-    newConf.user = this.state.get('user').toJS()
-    window.dpWriteHomeConfig(newConf, () => me.trigger(me.state))
+    this._persistLocally(() => this.trigger(this.state))
+  },
+
+  //
+  onPaymentComplete(user) {
+    this.state = this.state.set('user', Immutable.fromJS(user))
+    this._persistLocally(() => this.trigger(this.state))
   },
 
   //

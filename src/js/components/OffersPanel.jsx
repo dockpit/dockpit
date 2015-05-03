@@ -36,6 +36,7 @@ class OffersPanel extends React.Component {
   componentWillUnmount() {
     this.offerStoreUnsubscribe()
     this.boxStoreUnsubscribe()
+    this.userStoreUnsubscribe()
   }
 
   //

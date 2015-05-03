@@ -11,6 +11,16 @@ const Users = {
         .set('Accept', 'application/json')
         .end(shared.responseHandler(resolve, reject, "user"));
     })
+  },
+
+  //users.payment
+  payment(token, stripe_token) {
+    return new Promise((resolve, reject) => {
+      request
+        .post(shared.endpoint + "/api/users.payment?token="+token+"&stripe_token="+stripe_token)
+        .set('Accept', 'application/json')
+        .end(shared.responseHandler(resolve, reject, "user"));
+    })
   }
 
 }
